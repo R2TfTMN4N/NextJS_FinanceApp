@@ -9,6 +9,7 @@ import {
 } from "@clerk/nextjs";
 
 import "./globals.css";
+import { QueryProviders } from "@/providers/query-provider";
 
 
 export const metadata: Metadata = {
@@ -24,10 +25,8 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body
-        
-        >
-          <header className="flex justify-end items-center gap-4 ">
+        <body>
+          {/* <header className="flex justify-end items-center gap-4 ">
             <SignedOut>
               <SignInButton />
               <SignUpButton>
@@ -37,10 +36,10 @@ export default function RootLayout({
               </SignUpButton>
             </SignedOut>
             <SignedIn>
-              {/* <UserButton /> */}
+              <UserButton />
             </SignedIn>
-          </header>
-          {children}
+          </header> */}
+          <QueryProviders>{children}</QueryProviders>
         </body>
       </html>
     </ClerkProvider>

@@ -59,7 +59,7 @@ const config: Config = {
         sm: "calc(var(--radius) - 4px)",
       },
     },
-    plugins: [tailwindcssAnimate],
   },
+  plugins: [tailwindcssAnimate],
 };
 export default config;

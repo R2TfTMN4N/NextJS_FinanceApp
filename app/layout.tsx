@@ -1,15 +1,17 @@
 import { type Metadata } from "next";
+import { Toaster } from "@/components/ui/sonner";
 import {
   ClerkProvider,
-  SignInButton,
-  SignUpButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
+  // SignInButton,
+  // SignUpButton,
+  // SignedIn,
+  // SignedOut,
+  // UserButton,
 } from "@clerk/nextjs";
 
 import "./globals.css";
 import { QueryProviders } from "@/providers/query-provider";
+import { SheetProvider } from "@/providers/sheet-providers";
 
 
 export const metadata: Metadata = {
@@ -39,7 +41,12 @@ export default function RootLayout({
               <UserButton />
             </SignedIn>
           </header> */}
-          <QueryProviders>{children}</QueryProviders>
+          <QueryProviders>
+            <SheetProvider/>
+            <Toaster></Toaster>
+
+            {children}
+            </QueryProviders>
         </body>
       </html>
     </ClerkProvider>

@@ -17,7 +17,9 @@ import {
 const formSchema = insertAccountSchema.pick({
   name: true,
 });
+
 type FormValues = z.input<typeof formSchema>;
+
 type Props = {
   id?: string;
   defaultValues?: FormValues;
@@ -25,6 +27,7 @@ type Props = {
   onDelete?: () => void;
   disabled?: boolean;
 };
+
 export const AccountForm = ({
   id,
   defaultValues,
@@ -36,12 +39,16 @@ export const AccountForm = ({
     resolver: zodResolver(formSchema),
     defaultValues: defaultValues,
   });
+
   const handleSubmit = (values: FormValues) => {
-    onSubmit(values);
+    console.log({ values });
+    onSubmit(values); // ✅ Gọi hàm onSubmit từ props
   };
+
   const handleDelete = () => {
     onDelete?.();
   };
+
   return (
     <Form {...form}>
       <form
@@ -61,24 +68,24 @@ export const AccountForm = ({
                   {...field}
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
-        <Button className="w-full" disabled={disabled}>
-          {id ? "Save changes" : "Create account"}
-        </Button>
-        {!!id && (
+        {onDelete && (
           <Button
             type="button"
-            disabled={disabled}
+            variant="destructive"
             onClick={handleDelete}
-            className="w-full"
-            variant="outline"
+            disabled={disabled}
           >
-            <Trash className="size-4 mr-2" />
-            Delete account
+            <Trash className="w-4 h-4 mr-2" />
+            Delete
           </Button>
         )}
+        <Button type="submit" disabled={disabled}>
+          {id ? "Update" : "Create"}
+        </Button>
       </form>
     </Form>
   );

@@ -1,8 +1,3 @@
-import { insertAccountSchema } from "@/db/schema";
-import { useOpenAccount } from "../hooks/use-open-accounts";
-import { AccountForm } from "./account-form";
-import { useEditAccount } from "../api/use-edit-account";
-import { useDeleteAccount } from "../api/use-delete-account";
 import { useConfirm } from "@/hooks/use-confirm";
 import {
   Sheet,
@@ -12,8 +7,13 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import z from "zod";
-import { useGetAccount } from "../api/use-get-account";
 import { Loader2 } from "lucide-react";
+import { useGetAccount } from "@/features/accounts/api/use-get-account";
+import { useOpenAccount } from "../hooks/use-open-accounts";
+import { insertAccountSchema } from "@/db/schema";
+import { useDeleteAccount } from "@/features/accounts/api/use-delete-account";
+import { useEditAccount } from "../api/use-edit-account";
+import { AccountForm } from "@/features/accounts/components/account-form";
 
 const formSchema = insertAccountSchema.pick({
   name: true,
@@ -22,20 +22,20 @@ type FormValues = z.input<typeof formSchema>;
 
 export const EditAccountSheet = () => {
   const { isOpen, id, onClose } = useOpenAccount();
-  
-  const [ConfirmDialog,confirm]=useConfirm("Are you sure?","You are about to delete this transaction")
-  const accountQuery=useGetAccount(id)
-  const editMutation=useEditAccount(id)
-  const deleteMutation=useDeleteAccount(id)
-  const isPending=editMutation.isPending||deleteMutation.isPending
-  const isLoading=accountQuery.isLoading;
-  const onSubmit=(values:FormValues)=>{
-    editMutation.mutate(values,{
-        onSuccess:()=>{onClose()}
+
+  const [ConfirmDialog, confirm] = useConfirm("Are you sure?", "You are about to delete this transaction");
+  const accountQuery = useGetAccount(id);
+  const editMutation = useEditAccount(id);
+  const deleteMutation = useDeleteAccount(id);
+  const isPending = editMutation.isPending || deleteMutation.isPending;
+  const isLoading = accountQuery.isLoading;
+  const onSubmit = (values: FormValues) => {
+    editMutation.mutate(values, {
+      onSuccess: () => { onClose() }
     })
 
   }
-  const onDelete=async()=>{
+  const onDelete = async () => {
     const ok=await confirm();
     if(ok) deleteMutation.mutate(undefined,{
       onSuccess:()=>{
@@ -56,7 +56,7 @@ export const EditAccountSheet = () => {
           <SheetContent className="space-y-4">
             <SheetHeader>
               <SheetTitle>Edit Account</SheetTitle>
-              <SheetDescription>Edit Account </SheetDescription>
+              <SheetDescription>Edit Account</SheetDescription>
             </SheetHeader>
             {isLoading ? (
               <div className="absolute inset-0 flex items-center justify-center">

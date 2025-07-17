@@ -3,19 +3,18 @@ import {  InferResponseType } from "hono";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { client } from "@/lib/hono";
 
-type ResponseType = InferResponseType<typeof client.api.accounts[":id"]["$delete"]>;
+type ResponseType = InferResponseType<typeof client.api.categories[":id"]["$delete"]>;
 
-export const useDeleteAccount = (id?:string) => {
+export const useDeleteCategory = (id?:string) => {
   const queryClient = useQueryClient();
   
   const mutation = useMutation<ResponseType, Error>({
     mutationFn: async () => {
       if (!id) throw new Error("ID is required");
-      
-      // console.log("Deleting account with ID:", id);
-      
-      const response = await client.api.accounts[":id"]["$delete"]({ 
-        param: { id } 
+
+      // console.log("Deleting category with ID:", id);
+      const response = await client.api.categories[":id"]["$delete"]({
+        param: { id }
       });
       
       // console.log("Delete response status:", response.status);
@@ -24,7 +23,7 @@ export const useDeleteAccount = (id?:string) => {
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         // console.log("Delete error data:", errorData);
-        const errorMessage = (errorData as {error?: string})?.error || `Failed to delete account (${response.status})`;
+        const errorMessage = (errorData as {error?: string})?.error || `Failed to delete category (${response.status})`;
         throw new Error(errorMessage);
       }
       
@@ -33,12 +32,12 @@ export const useDeleteAccount = (id?:string) => {
       return result;
     },
     onSuccess: () => {
-      toast.success("Account deleted");
-      queryClient.invalidateQueries({ queryKey: ["accounts"] });
-      queryClient.invalidateQueries({ queryKey: ["account", { id }] });
+      toast.success("Category deleted");
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
+      queryClient.invalidateQueries({ queryKey: ["category", { id }] });
     },
     onError: (error) => {
-      toast.error(error.message || "Failed to delete account");
+      toast.error(error.message || "Failed to delete category");
     },
   });
   

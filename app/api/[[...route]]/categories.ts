@@ -172,9 +172,9 @@ const app = new Hono()
       const auth = getAuth(c);
       const { id } = c.req.valid("param");
 
-      console.log("DELETE /accounts/:id called");
+      console.log("DELETE /categories/:id called");
       console.log("Auth userId:", auth?.userId);
-      console.log("Account ID to delete:", id);
+      console.log("Category ID to delete:", id);
 
       if (!auth?.userId) {
         console.log("Unauthorized: no userId");
@@ -195,11 +195,11 @@ const app = new Hono()
         console.log("Delete result:", data);
 
         if (!data) {
-        //   console.log("Account not found or not owned by user");
+        //   console.log("Category not found or not owned by user");
           return c.json({ error: "Not found" }, 404);
         }
 
-        console.log("Account deleted successfully:", data);
+        console.log("Category deleted successfully:", data);
         return c.json({ data });
       } catch (error) {
         console.error("Database error:", error);

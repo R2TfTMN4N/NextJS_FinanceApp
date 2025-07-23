@@ -16,7 +16,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-export const formSchema = insertAccountSchema.pick({ name: true });
+export const formSchema = insertTransactionSchema.pick({ name: true });
 
 export type FormValues = z.infer<typeof formSchema>;
 
@@ -28,7 +28,7 @@ type Props = {
   disabled?: boolean;
 };
 
-export const AccountForm = ({
+export const TransactionForm = ({
   id,
   defaultValues,
   onSubmit,
@@ -58,7 +58,7 @@ export const AccountForm = ({
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Account Name</FormLabel>
+              <FormLabel>Transaction Name</FormLabel>
               <FormControl>
                 <Input
                   disabled={disabled}

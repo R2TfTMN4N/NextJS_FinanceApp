@@ -6,16 +6,16 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-// account form
+// transaction form
 import {
-  AccountForm,
+  TransactionForm,
   FormValues,
-} from "@/features/accounts/components/account-form";
-// account api
+} from "@/features/transactions/components/transaction-form";
+// transaction api
 
-import { useDeleteAccount } from "../api/use-delete-account";
-import { useEditAccount } from "../api/use-edit-account";
-import { useGetAccount } from "../api/use-get-account";
+import { useDeleteTransaction } from "../api/use-delete-account";
+import { useEditTransaction} from "../api/use-edit-account";
+import { useGetTransaction } from "../api/use-get-transaction";
 // account hook
 import { useOpenAccount } from "../hooks/use-open-accounts";
 // global hooks
@@ -23,14 +23,14 @@ import { useConfirm } from "@/hooks/use-confirm";
 // icon
 import { Loader2 } from "lucide-react";
 
-export const EditAccountSheet = () => {
-  const { isOpen, onClose, id } = useOpenAccount();
-  const accountQuery = useGetAccount(id);
-  const mutation = useEditAccount(id);
-  const deleteMutation = useDeleteAccount(id);
+export const EditTransactionSheet = () => {
+  const { isOpen, onClose, id } = useOpenTransaction();
+  const transactionQuery = useGetTransaction(id);
+  const mutation = useEditTransaction(id);
+  const deleteMutation = useDeleteTransaction(id);
   const [ConfirmationDialog, confirm] = useConfirm(
-    "Delete Account",
-    "Are you sure you want to delete this account?"
+    "Delete Transaction",
+    "Are you sure you want to delete this transaction?"
   );
   const onSubmit = (formValues: FormValues) => {
     mutation.mutate(formValues, {
@@ -48,11 +48,11 @@ export const EditAccountSheet = () => {
       },
     });
   };
-  const isLoading = accountQuery.isLoading;
+  const isLoading = transactionQuery.isLoading;
   const isPending = mutation.isPending || deleteMutation.isPending;
-  const defaultValues = accountQuery.data
+  const defaultValues = transactionQuery.data
     ? {
-        name: accountQuery.data.name,
+        name: transactionQuery.data.name,
       }
     : {
         name: "",
@@ -64,15 +64,15 @@ export const EditAccountSheet = () => {
       <Sheet open={isOpen} onOpenChange={onClose}>
         <SheetContent className="space-y-4">
           <SheetHeader>
-            <SheetTitle>Edit Account</SheetTitle>
-            <SheetDescription>Edit the name of the account</SheetDescription>
+            <SheetTitle>Edit Transaction</SheetTitle>
+            <SheetDescription>Edit the name of the transaction</SheetDescription>
           </SheetHeader>
           {isLoading ? (
             <div className="absolute inset-0 flex items-center justify-center">
               <Loader2 className="animate-spin size-6 text-slate-600" />
             </div>
           ) : (
-            <AccountForm
+            <TransactionForm
               id={id}
               onSubmit={onSubmit}
               onDelete={onDelete}

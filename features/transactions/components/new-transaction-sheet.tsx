@@ -31,7 +31,7 @@ export const NewTransactionSheet = () => {
   const onCreateCategory = (name: string) => {
     categoryMutation.mutate({ name });
   };
-  const categoryOptions = categoryQuery.data?.map((category) => ({
+  const categoryOptions = (categoryQuery.data ?? []).map((category) => ({
     value: category.id,
     label: category.name,
   })) || [];

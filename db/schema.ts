@@ -1,5 +1,5 @@
-import { integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
+import { integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -7,7 +7,6 @@ export const accounts = pgTable("accounts", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
   userId: text("user_id").notNull(),
-  plaidId: text("plaid_id"),
 });
 
 export const accountsRelations = relations(accounts, ({ many }) => ({
@@ -20,7 +19,6 @@ export const categories = pgTable("categories", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
   userId: text("user_id").notNull(),
-  plaidId: text("plaid_id"),
 });
 
 export const categoriesRelations = relations(categories, ({ many }) => ({
@@ -50,12 +48,20 @@ export const transactionsRelations = relations(transactions, ({ one }) => ({
     fields: [transactions.accountId],
     references: [accounts.id],
   }),
-  category: one(categories, {
+  categories: one(categories, {
     fields: [transactions.categoryId],
     references: [categories.id],
   }),
 }));
 
 export const insertTransactionSchema = createInsertSchema(transactions, {
-  date: z.coerce.date(), // Directly use z.coerce.date() to override
+  date: z.coerce.date(),
+});
+export const apiTransactionSchema = z.object({
+  date: z.coerce.date(),
+  accountId: z.string(),
+  categoryId: z.string().nullable().optional(),
+  payee: z.string(),
+  amount: z.number().int(),
+  notes: z.string().nullable().optional(),
 });

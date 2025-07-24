@@ -13,11 +13,11 @@ import {
 } from "@/features/transactions/components/transaction-form";
 // transaction api
 
-import { useDeleteTransaction } from "../api/use-delete-account";
-import { useEditTransaction} from "../api/use-edit-account";
+import { useDeleteTransaction } from "../api/use-delete-transaction";
+import { useEditTransaction } from "../api/use-edit-transaction";
 import { useGetTransaction } from "../api/use-get-transaction";
+import { useOpenTransaction } from "../hooks/use-open-transactions";
 // account hook
-import { useOpenAccount } from "../hooks/use-open-accounts";
 // global hooks
 import { useConfirm } from "@/hooks/use-confirm";
 // icon

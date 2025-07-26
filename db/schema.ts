@@ -54,9 +54,10 @@ export const transactionsRelations = relations(transactions, ({ one }) => ({
   }),
 }));
 
-export const insertTransactionSchema = createInsertSchema(transactions, {
-  date: z.coerce.date(),
-});
+// Sửa insertTransactionSchema - bỏ override date
+export const insertTransactionSchema = createInsertSchema(transactions);
+
+// Schema riêng cho API validation
 export const apiTransactionSchema = z.object({
   date: z.coerce.date(),
   accountId: z.string(),

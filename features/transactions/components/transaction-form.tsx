@@ -17,7 +17,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Select } from "@/components/ui/select";
+import { Select } from "@/components/select";
 import { DatePicker } from "@/components/ui/date-picker";
 import { convertAmountToMiliunits } from "@/lib/utils";
 

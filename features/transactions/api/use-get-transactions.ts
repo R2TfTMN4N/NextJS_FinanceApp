@@ -1,6 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import {client} from "@/lib/hono"
+
 import { useSearchParams } from "next/navigation";
+
 export const useGetTransactions=()=>{
     const params = useSearchParams();
     const from = params.get("from")||"";
@@ -9,7 +11,11 @@ export const useGetTransactions=()=>{
     const query=useQuery({
         queryKey:["transactions",{from,to,accountId}],
         queryFn:async()=>{
-            const response=await client.api.transactions.$get();
+            const response=await client.api.transactions.$get({
+                query:{from,
+                    to,
+                    accountId}
+            });
             if(!response.ok) throw new Error("failed to fetch transactions")
             
             const {data} = await response.json()

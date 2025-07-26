@@ -69,7 +69,7 @@ import { CategoryColumn } from "./category-column";
           </Button>
         );
       },
-      cell: ({ row   }) => {
+      cell: ({ row}) => {
         return <CategoryColumn
           id={row.original.id}
           category={row.original.category}

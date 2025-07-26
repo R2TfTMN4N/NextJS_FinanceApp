@@ -2,14 +2,39 @@
 import { Card, CardContent, CardTitle, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Loader2, Plus } from "lucide-react";
+// import { useGetTransaction } from "@/features/transactions/api/use-get-transaction";
+import { useNewTransaction } from "@/features/transactions/hooks/use-new-transaction";
 import { columns } from "./columns";
 import { DataTable } from "@/components/data-table";
-import { Skeleton } from "@/components/ui/skeleton";
-import { useNewTransaction } from "@/features/transactions/hooks/use-new-transaction";
-import { useBulkDeleteTransactions } from "@/features/transactions/api/use-bulk-delete-transactions";
 import { useGetTransactions } from "@/features/transactions/api/use-get-transactions";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useBulkDeleteTransactions } from "@/features/transactions/api/use-bulk-delete-transactions";
+import { useState } from "react";
+import { UploadButton } from "./uploadbutton";
+import { ImportCard } from "./import-card";
+enum VARIANTS {
+  LIST="LIST",
+  IMPORT="IMPORT"
+}
+const INITIAL_IMPORT_RESULT = {
+  data:[],
+  errors:[],
+  meta:{}
+};
 
 const TransactionsPage = () => {
+  const [variant, setVariant] = useState<VARIANTS>(VARIANTS.LIST);
+  const [importResult, setImportResult] = useState(INITIAL_IMPORT_RESULT);
+  const onUpload = (result: typeof INITIAL_IMPORT_RESULT) => {
+    setImportResult(result);
+    setVariant(VARIANTS.IMPORT);
+    
+  };
+  const onCancelImport = () => {
+    setVariant(VARIANTS.LIST);
+    setImportResult(INITIAL_IMPORT_RESULT);
+  }
+
   const newTransaction = useNewTransaction();
   const deleteTransactions = useBulkDeleteTransactions();
   const transactionQuery = useGetTransactions();
@@ -21,37 +46,58 @@ const TransactionsPage = () => {
       <div className="max-w-screen-xl mx-auto w-full pb-10 -mt-24">
         <Card className="border-none drop-shadow-sm">
           <CardHeader>
-            <Skeleton className="h-8 w-48"/>
+            <Skeleton className="h-8 w-48" />
           </CardHeader>
           <CardContent>
             <div className="h-[500px] w-full flex items-center justify-center">
-                <Loader2 className="size-6 text-slate-300 animate-spin"/>
-
+              <Loader2 className="size-6 text-slate-300 animate-spin" />
             </div>
           </CardContent>
         </Card>
       </div>
     );
   }
+  if (variant === VARIANTS.IMPORT) {
+    return (
+      <ImportCard 
+        data={importResult.data}
+        onCancel={onCancelImport}
+        onSubmit={() => {}}
+      />
+    );
+  }
 
   return (
     <div className="max-w-screen-xl mx-auto w-full pb-10 -mt-24">
       <Card className="border-none drop-shadow-sm">
-        <CardHeader className="gap-y-2 lg:flex-row lg:items-center lg:justify-between">
-          <CardTitle className="text-xl line-clamp-1">Transactions page</CardTitle>
-          <Button onClick={newTransaction.onOpen} size="sm">
-            <Plus className="size-4 mr-2"></Plus>
-            Add New
-          </Button>
+        <CardHeader className="flex flex-col gap-y-2 md:flex-row md:items-center md:justify-between">
+          <CardTitle className="text-xl line-clamp-1">
+            Transactions page
+          </CardTitle>
+
+          <div className="flex flex-col gap-y-2 md:flex-row md:items-center md:gap-x-2">
+            <UploadButton onUpload={onUpload} className="w-full :w-auto">
+              Import
+            </UploadButton>
+
+            <Button
+              onClick={newTransaction.onOpen}
+              size="sm"
+              className="w-full md:w-auto"
+            >
+              <Plus className="size-4 mr-2" />
+              Add New
+            </Button>
+          </div>
         </CardHeader>
+
         <CardContent>
           <DataTable
-            onDelete={
-                (row) => {
+            onDelete={(row) => {
               const ids = row.map((r) => r.original.id);
               deleteTransactions.mutate({ ids });
             }}
-            filterKey="name"
+            filterKey="payee"
             columns={columns}
             data={transactions}
             disabled={isDisabled}

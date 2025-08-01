@@ -21,9 +21,9 @@ enum VARIANTS {
   IMPORT = "IMPORT",
 }
 const INITIAL_IMPORT_RESULT = {
-  data: [],
-  errors: [],
-  meta: {},
+  data: [] as string[][],
+  errors: [] as unknown[],
+  meta: {} as unknown,
 };
 
 const TransactionsPage = () => {

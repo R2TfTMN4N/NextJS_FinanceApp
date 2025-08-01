@@ -1,5 +1,5 @@
-import { SignIn,ClerkLoaded,ClerkLoading } from "@clerk/nextjs";
-import { Loader2 } from "lucide-react";
+import { SignIn } from "@clerk/nextjs";
+
 export default function Page() {
 
   return (

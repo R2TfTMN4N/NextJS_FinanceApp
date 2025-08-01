@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 
 import { useState } from "react";
 import { ImportTable } from "./import-table";
-import { convertAmountFromMiliunits } from "@/lib/utils";
+import { convertAmountFromMiliunits, convertAmountToMiliunits } from "@/lib/utils";
 import { format, parse } from "date-fns";
 
 const dateFormat = "M/d/yyyy H:mm";
@@ -66,24 +66,22 @@ export const ImportCard = ({ data, onCancel, onSubmit }: Props) => {
         })
         .filter((row) => row.length > 0),
     };
-    const arrayOfData = mappedData.body.map((row) => {
-      return row.reduce((acc: Record<string, unknown>, cell, index) => {
-        const header = mappedData.headers[index];
-        if (header !== null) {
-          acc[header] = cell;
-        }
-        return acc;
-      }, {});
-    });
-    const formattedData = arrayOfData.map((item) => ({
-      ...item,
-      amount: convertAmountFromMiliunits(parseFloat(item.amount as string)),
-      date: format(
-        parse(item.date as string, dateFormat, new Date()),
-        outputFormat
-      ),
-      payee: item.payee as string,
+     const arrayOfData = mappedData.body.map((row) => {
+       return row.reduce((acc: any, curr, index) => {
+         const header = mappedData.headers[index];
+         if (header !== null) {
+           acc[header] = curr;
+         }
+         return acc;
+       }, {});
+     });
+    const formattedData = arrayOfData.map((row) => ({
+      ...row,
+      amount: convertAmountToMiliunits(parseFloat(row.amount)),
+      date: format(parse(row.date, dateFormat, new Date()), outputFormat),
     }));
+
+    console.log(formattedData)
     onSubmit(formattedData);
   };
 

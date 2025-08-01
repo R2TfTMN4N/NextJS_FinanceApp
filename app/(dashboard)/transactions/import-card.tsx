@@ -16,6 +16,7 @@ interface SelectedColumnsState {
 type Props = {
   data: string[][];
   onCancel: () => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onSubmit: (data: any) => void;
 };
 
@@ -64,7 +65,7 @@ export const ImportCard = ({ data, onCancel, onSubmit }: Props) => {
       }).filter((row)=>row.length>0)
     }
     const arrayOfData=mappedData.body.map((row)=>{
-      return row.reduce((acc:any,cell,index)=>{
+      return row.reduce((acc: Record<string, unknown>,cell,index)=>{
         const header=mappedData.headers[index];
         if(header!==null){
           acc[header]=cell;
@@ -76,8 +77,9 @@ export const ImportCard = ({ data, onCancel, onSubmit }: Props) => {
     })
     const formattedData=arrayOfData.map((item)=>({
       ...item,
-      amount:convertAmountFromMiliunits(parseFloat(item.amount)),
-      date: format(parse(item.date,dateFormat,new Date()),outputFormat)
+      amount:convertAmountFromMiliunits(parseFloat(item.amount as string)),
+      date: format(parse(item.date as string,dateFormat,new Date()),outputFormat),
+      payee: item.payee as string
 
 
     }))

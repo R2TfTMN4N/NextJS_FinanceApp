@@ -32,12 +32,17 @@ export const formSchema =  z.object({
  })
 export type FormValues = z.input<typeof formSchema>;
 
-export const apiSchema = insertTransactionSchema.omit({
-  id: true,
- })
+export const apiSchema = z.object({
+  date: z.coerce.date(),
+  accountId: z.string(),
+  amount: z.number().int(),
+  payee: z.string(),
+  notes: z.string().nullable().optional(),
+  categoryId: z.string().nullable().optional(),
+});
 
 
-export type ApiFormValues = z.input<typeof apiSchema>;
+export type ApiFormValues = z.infer<typeof apiSchema>;
 
 type Props = {
   id?: string;

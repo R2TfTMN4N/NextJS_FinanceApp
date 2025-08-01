@@ -15,10 +15,10 @@ import { useDeleteCategory } from "@/features/categories/api/use-delete-category
 import { useEditCategory } from "@/features/categories/api/use-edit-category";
 import { CategoryForm } from "./category-form";
 
-const formSchema = insertCategorySchema.pick({
-  name: true,
+const formSchema = z.object({
+  name: z.string().min(1, "Name is required"),
 });
-type FormValues = z.input<typeof formSchema>;
+type FormValues = z.infer<typeof formSchema>;
 
 export const EditCategorySheet = () => {
   const { isOpen, id, onClose } = useOpenCategory();

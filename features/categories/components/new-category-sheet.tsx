@@ -12,10 +12,10 @@ import {
 } from "@/components/ui/sheet";
 import z from "zod";
 
-const formSchema = insertCategorySchema.pick({
-  name: true,
+const formSchema = z.object({
+  name: z.string().min(1, "Name is required"),
 });
-type FormValues = z.input<typeof formSchema>;
+type FormValues = z.infer<typeof formSchema>;
 
 export const NewCategorySheet = () => {
   const {isOpen,onClose} = useNewCategory();

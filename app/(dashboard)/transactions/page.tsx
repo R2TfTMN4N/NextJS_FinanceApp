@@ -21,9 +21,9 @@ enum VARIANTS {
   IMPORT = "IMPORT",
 }
 const INITIAL_IMPORT_RESULT = {
-  data: [],
-  errors: [],
-  meta: {},
+  data: [] as string[][],
+  errors: [] as unknown[],
+  meta: {} as unknown,
 };
 
 const TransactionsPage = () => {
@@ -103,9 +103,7 @@ const TransactionsPage = () => {
           </CardTitle>
 
           <div className="flex flex-col gap-y-2 md:flex-row md:items-center md:gap-x-2">
-            <UploadButton onUpload={onUpload} className="w-full md:w-auto">
-              Import
-            </UploadButton>
+            <UploadButton onUpload={onUpload} />
 
             <Button
               onClick={newTransaction.onOpen}

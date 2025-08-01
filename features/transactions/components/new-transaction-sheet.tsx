@@ -17,10 +17,15 @@ import { useGetCategories } from "@/features/categories/api/use-get-categories";
 import { useCreateAccount } from "@/features/accounts/api/use-create-account";
 import { useGetAccounts } from "@/features/accounts/api/use-get-accounts";
 
-const formSchema = insertTransactionSchema.omit({
-  id: true,
+const formSchema = z.object({
+  date: z.coerce.date(),
+  accountId: z.string(),
+  amount: z.number().int(),
+  payee: z.string(),
+  notes: z.string().nullable().optional(),
+  categoryId: z.string().nullable().optional(),
 });
-type FormValues = z.input<typeof formSchema>;
+type FormValues = z.infer<typeof formSchema>;
 
 export const NewTransactionSheet = () => {
   const { isOpen, onClose } = useNewTransaction();

@@ -16,7 +16,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-export const formSchema = insertAccountSchema.pick({ name: true });
+export const formSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+});
 
 export type FormValues = z.infer<typeof formSchema>;
 

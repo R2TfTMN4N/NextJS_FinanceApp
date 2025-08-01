@@ -19,8 +19,13 @@ import { useGetAccounts } from "@/features/accounts/api/use-get-accounts";
 import { useCreateAccount } from "@/features/accounts/api/use-create-account";
 import { Loader2 } from "lucide-react";
 import { insertTransactionSchema } from "@/db/schema";
-const formSchema = insertTransactionSchema.omit({
-  id: true,
+const formSchema = z.object({
+  date: z.coerce.date(),
+  accountId: z.string(),
+  amount: z.number().int(),
+  payee: z.string(),
+  notes: z.string().nullable().optional(),
+  categoryId: z.string().nullable().optional(),
 });
 type FormValues = z.infer<typeof formSchema>;
 

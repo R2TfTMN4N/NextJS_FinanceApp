@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -18,10 +18,10 @@ export const useSelectAccount = (): [() => JSX.Element,() => Promise<unknown>] =
   const onCreateAccount = (name: string) =>accountMutation.mutate({
       name
     });
-  const accountOptions = (accountQuery.data ?? []).map((account) => ({
+  const accountOptions = useMemo(() => (accountQuery.data ?? []).map((account) => ({
     label: account.name,
     value: account.id,
-  }));
+  })), [accountQuery.data]);
   const [promise, setPromise] = useState<{
     resolve: (value: string | undefined) => void;
   } | null>(null);

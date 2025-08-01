@@ -14,11 +14,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-const formSchema = insertCategorySchema.pick({
-  name: true,
+const formSchema = z.object({
+  name: z.string().min(1, "Name is required"),
 });
 
-type FormValues = z.input<typeof formSchema>;
+type FormValues = z.infer<typeof formSchema>;
 
 type Props = {
   id?: string;

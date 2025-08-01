@@ -6,7 +6,7 @@ import { ImportTable } from "./import-table";
 import { convertAmountFromMiliunits } from "@/lib/utils";
 import { format,parse } from "date-fns";
 
-const dateFormat = "yyyy-MM-dd HH:mm:ss";
+const dateFormat = "M/d/yyyy H:mm"; 
 const outputFormat = "yyyy-MM-dd";
 const requiredOptions = ["amount", "date", "payee"];
 interface SelectedColumnsState {
@@ -16,7 +16,7 @@ interface SelectedColumnsState {
 type Props = {
   data: string[][];
   onCancel: () => void;
-  onSubmit: (data: string[][]) => void;
+  onSubmit: (data: any) => void;
 };
 
 export const ImportCard = ({ data, onCancel, onSubmit }: Props) => {

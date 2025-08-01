@@ -12,34 +12,58 @@ import { useBulkDeleteTransactions } from "@/features/transactions/api/use-bulk-
 import { useState } from "react";
 import { UploadButton } from "./uploadbutton";
 import { ImportCard } from "./import-card";
+import { transactions as transactionSchema } from "@/db/schema";
+import { useSelectAccount } from "@/features/accounts/hooks/use-select-account";
+import { toast } from "sonner";
+import { useBulkCreateTransactions } from "@/features/transactions/api/use-bulk-create-transactions";
 enum VARIANTS {
-  LIST="LIST",
-  IMPORT="IMPORT"
+  LIST = "LIST",
+  IMPORT = "IMPORT",
 }
 const INITIAL_IMPORT_RESULT = {
-  data:[],
-  errors:[],
-  meta:{}
+  data: [],
+  errors: [],
+  meta: {},
 };
 
 const TransactionsPage = () => {
+  const [AccountDialog, confirm] = useSelectAccount();
   const [variant, setVariant] = useState<VARIANTS>(VARIANTS.LIST);
   const [importResult, setImportResult] = useState(INITIAL_IMPORT_RESULT);
   const onUpload = (result: typeof INITIAL_IMPORT_RESULT) => {
     setImportResult(result);
     setVariant(VARIANTS.IMPORT);
-    
   };
   const onCancelImport = () => {
     setVariant(VARIANTS.LIST);
     setImportResult(INITIAL_IMPORT_RESULT);
-  }
+  };
 
   const newTransaction = useNewTransaction();
+  const createTransactions = useBulkCreateTransactions();
   const deleteTransactions = useBulkDeleteTransactions();
   const transactionQuery = useGetTransactions();
   const transactions = transactionQuery.data || [];
   const isDisabled = transactionQuery.isLoading || deleteTransactions.isPending;
+
+  const onSubmitImport = async (
+    values: typeof transactionSchema.$inferInsert[]
+  ) => {
+    const accountId = await confirm();
+    if (!accountId) {
+      return toast.error("Please select an account to continue . . .");
+    }
+    const data = values.map((value) => ({
+      ...value,
+      accountId: accountId as string,
+    }));
+    createTransactions.mutate(data,{
+      onSuccess:()=>{
+        onCancelImport()
+      }
+    })
+
+  };
 
   if (transactionQuery.isLoading) {
     return (
@@ -59,11 +83,14 @@ const TransactionsPage = () => {
   }
   if (variant === VARIANTS.IMPORT) {
     return (
-      <ImportCard 
-        data={importResult.data}
-        onCancel={onCancelImport}
-        onSubmit={() => {}}
-      />
+      <>
+        <AccountDialog />
+        <ImportCard
+          data={importResult.data}
+          onCancel={onCancelImport}
+          onSubmit={onSubmitImport}
+        />
+      </>
     );
   }
 
@@ -76,7 +103,7 @@ const TransactionsPage = () => {
           </CardTitle>
 
           <div className="flex flex-col gap-y-2 md:flex-row md:items-center md:gap-x-2">
-            <UploadButton onUpload={onUpload} className="w-full :w-auto">
+            <UploadButton onUpload={onUpload} className="w-full md:w-auto">
               Import
             </UploadButton>
 

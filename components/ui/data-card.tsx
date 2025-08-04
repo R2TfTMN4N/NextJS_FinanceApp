@@ -3,6 +3,7 @@ import { VariantProps, cva } from "class-variance-authority";
 import { IconType } from "react-icons/lib";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./card";
 import CountUp from "react-countup";
+import { Skeleton } from "./skeleton";
 
 const boxVariant = cva("rounded-md p-3 shrink-0", {
   variants: {
@@ -86,3 +87,23 @@ export const DataCard = ({
    
   </Card>);
 };
+export const DataCardLoading = () => {
+    return(
+        <Card className="border-none drop-shadow-sm h-[192px]">
+            <CardHeader className="flex flex-row items-center justify-between gap-x-4">
+                <div className="space-y-2">
+                    <Skeleton className="h-6 w-24"/>
+                    <Skeleton className="h-4 w-42"/>
+
+                </div>
+                <Skeleton className="size-12"/>
+            </CardHeader>
+            <CardContent>
+                <Skeleton className=" shrink-0 h-8 w-32 mb-2"/>
+                <Skeleton className="shrink-0 h-4 w-24"/>
+            </CardContent>
+        
+
+        </Card>
+    )
+}

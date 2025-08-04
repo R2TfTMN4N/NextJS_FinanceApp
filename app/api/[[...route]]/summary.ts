@@ -3,7 +3,7 @@ import { zValidator } from "@hono/zod-validator";
 import z from "zod";
 import { Hono } from "hono";
 import { differenceInDays, parse, subDays } from "date-fns";
-import { and, eq, lte, gte, sql, sum, lt, desc, gt } from "drizzle-orm";
+import { and, eq, lte, gte, sql, sum,  desc, lt } from "drizzle-orm";
 import { accounts, categories, transactions } from "@/db/schema";
 import { db } from "@/db/drizzle";
 import { calculatePercentageChange, fillMissingDays } from "@/lib/utils";
@@ -99,9 +99,9 @@ const app = new Hono().get(
       .where(
         and(
           accountId ? eq(transactions.accountId, accountId) : undefined,
-          eq(accounts.userId, auth.userId),
-          gt(transactions.amount, 0),
-          gte(transactions.date, startDate),
+            eq(accounts.userId, auth.userId),
+            lt(transactions.amount, 0),
+            gte(transactions.date, startDate),
           lte(transactions.date, endDate)
         )
       )
@@ -136,7 +136,7 @@ const app = new Hono().get(
         and(
           accountId ? eq(transactions.accountId, accountId) : undefined,
           eq(accounts.userId, auth.userId),
-       gte(transactions.date, startDate),
+          gte(transactions.date, startDate),
           lte(transactions.date, endDate)
         )
       )
@@ -150,14 +150,16 @@ const app = new Hono().get(
     )
 
     return c.json({
-      currentPeriod,
-      lastPeriod,
-      incomeChange,
-      expensesChange,
-      remainingChange,
-      finalCategories,
-      topCategories,
-      days
+      data:{
+        remainingAmount: currentPeriod.remaining ,
+        remainingChange,
+        incomeAmount: currentPeriod.income,
+        incomeChange,
+        expensesAmount: currentPeriod.expenses,
+        expensesChange,
+        categories: finalCategories,
+        days,
+      }
     });
   }
 );

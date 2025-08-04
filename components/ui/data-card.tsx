@@ -50,42 +50,42 @@ export const DataCard = ({
      icon: Icon,
      percentageChange=0,
      dateRange }: DataCardProps) => {
-  return( 
-  <Card className="border-none drop-shadow-sm">
-    <CardHeader className="flex flex-row items-center justify-between gap-x-4">
-      <div className="space-y-2">
-        <CardTitle className="text-2xl line-clamp-1">
-        {title}
-     </CardTitle>
-     <CardDescription className="line-clamp-1">
-        {dateRange}
-     </CardDescription>
-      </div>
-      <div className={cn("shrink-0", boxVariant({ variant: "default" }))}>
-        <Icon className={iconVariant({ variant: "default" })} />
-      </div>
-    </CardHeader>
-    <CardContent >
+  return (
+    <Card className="border-none drop-shadow-sm">
+      <CardHeader className="flex flex-row items-center justify-between gap-x-4">
+        <div className="space-y-2">
+          <CardTitle className="text-2xl line-clamp-1">{title}</CardTitle>
+          <CardDescription className="line-clamp-1">
+            {dateRange}
+          </CardDescription>
+        </div>
+        <div className={cn("shrink-0", boxVariant({ variant: "default" }))}>
+          <Icon className={iconVariant({ variant: "default" })} />
+        </div>
+      </CardHeader>
+      <CardContent>
         <h1 className="font-bold text-2xl mb-2 line-clamp-1 break-all">
-            <CountUp
-                preserveValue
-                start={0}
-                end={value}
-                decimals={2}
-                decimalPlaces={2}
-                formattingFn={formatCurrency}
-            />
-
-
+          <CountUp
+            preserveValue
+            start={0}
+            end={value}
+            decimals={2}
+            decimalPlaces={2}
+            formattingFn={formatCurrency}
+          />
         </h1>
-        <p className={cn("text-sm text-muted-foreground line-clamp-1", 
-            percentageChange >= 0 ? "text-emerald-500" : "text-rose-500")}>
-            {formatPercentage(percentageChange)} from last period
+        <p
+          className={cn(
+            "text-sm text-muted-foreground line-clamp-1",
+            percentageChange >= 0 ? "text-emerald-500" : "text-rose-500"
+          )}
+        >
+          {formatPercentage(percentageChange, { addPrefix: true })} from last
+          period
         </p>
-
-    </CardContent>
-   
-  </Card>);
+      </CardContent>
+    </Card>
+  );
 };
 export const DataCardLoading = () => {
     return(

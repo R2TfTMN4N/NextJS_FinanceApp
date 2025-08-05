@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 
 import { useState } from "react";
 import { ImportTable } from "./import-table";
-import { convertAmountFromMiliunits, convertAmountToMiliunits } from "@/lib/utils";
+import { convertAmountToMiliunits } from "@/lib/utils";
 import { format, parse } from "date-fns";
 
 const dateFormat = "M/d/yyyy H:mm";

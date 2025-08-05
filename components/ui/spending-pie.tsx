@@ -1,4 +1,4 @@
-import { FileSearch,PieChart,Radar, Target } from "lucide-react";
+import { FileSearch,Loader2,PieChart,Radar, Target } from "lucide-react";
 import {
     Select,
     SelectContent,
@@ -12,6 +12,7 @@ import { useState } from "react";
 import { PieVariant } from "./pie-variant";
 import { RadarVariant } from "./radar-variant";
 import { RadialVariant } from "./radial-variant";
+import { Skeleton } from "./skeleton";
 
 
 type Props={
@@ -43,19 +44,19 @@ export const SpendingPie = ({ data=[] }: Props) => {
                     <SelectContent>
                         <SelectItem value="pie">
                             <div className="flex items-center">
-                                <PieChart className="size-4 mr-2 shrink-0" data={data} />
+                                <PieChart className="size-4 mr-2 shrink-0" />
                                 <p className="line-clamp-1">Pie chart</p>
                             </div>
                         </SelectItem>
                         <SelectItem value="radar">
                             <div className="flex items-center">
-                                <Radar className="size-4 mr-2 shrink-0" data={data} />
+                                <Radar className="size-4 mr-2 shrink-0"  />
                                 <p className="line-clamp-1">Radar chart</p>
                             </div>
                         </SelectItem>
                         <SelectItem value="radial">
                             <div className="flex items-center">
-                                <Target className="size-4 mr-2 shrink-0" data={data} />
+                                <Target className="size-4 mr-2 shrink-0"  />
                                 <p className="line-clamp-1">Radial chart</p>
                             </div>
                         </SelectItem>
@@ -87,4 +88,24 @@ export const SpendingPie = ({ data=[] }: Props) => {
             </CardContent>
         </Card>
     );
+    
 };
+export const SpendingPieLoading=() => {
+    return (
+        <Card className="border-none drop-shadow-sm">
+            <CardHeader className="flex space-y-2 lg:space-y-0 lg:flex-row lg:items-center lg:justify-between">
+               <Skeleton className="h-8 w-48"/>
+               <Skeleton className="h-8 lg:w-[120px] w-full"/>
+
+            </CardHeader>
+            <CardContent>
+                <div className="flex h-[350px] w-full items-center justify-center">
+                    <Loader2 className="size-6 text-slate-300 animate-spin"/>
+
+                </div>
+
+            </CardContent>
+        </Card>
+    )
+
+}
